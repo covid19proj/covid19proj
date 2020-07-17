@@ -67,7 +67,7 @@ def covid19():
     pg_cur.execute(bubbles_query)
     row = pg_cur.fetchone()
 
-    return render_template('3d_bubles.html', bubbles_data=row[0])
+    return render_template('bubbles_3d.html', bubbles_data=row[0])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
