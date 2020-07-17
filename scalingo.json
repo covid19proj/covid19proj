@@ -1,7 +1,0 @@
-{
-  "name": "Sample Python2 Flask",
-  "description": "Sample Python2 web application using the Flask framework",
-  "logo": "https://scalingo.com/logo.svg",
-  "repository": "https://github.com/maschaalbu/covid19project",
-  "website": "https://covid19project.osc-fr1.scalingo.io"
-}
