@@ -36,7 +36,7 @@ def country_comparison():
     pg_cur.execute(country_comparison_query)
     row = pg_cur.fetchone()
 
-    return (row[0])
+    return render_template("country_comparison.html", data=row[0])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
