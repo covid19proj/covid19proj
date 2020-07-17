@@ -28,6 +28,30 @@ order by countries_and_territories, cases_total desc
 	limit 10
 )
 """
+bubbles_query = """
+select
+string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
+(
+ SELECT deaths_total FROM reports_cumulative r
+ WHERE r.countries_and_territories = m1.countries_and_territories
+ ORDER BY date_rep DESC
+ LIMIT 1
+)::text || ']', ',')
+from country_metrics m1
+inner join country_metrics m2 using (countries_and_territories)
+where 
+m1.metric = 'gdp_per_capita' and
+m2.metric = 'median_age' and
+m1.countries_and_territories in (
+select countries_and_territories from
+(
+select distinct on (countries_and_territories) countries_and_territories, deaths_total
+from reports_cumulative
+order by countries_and_territories, deaths_total desc
+) x order by deaths_total desc
+limit 25
+)
+"""
 
 app = Flask(__name__)
 
@@ -37,6 +61,13 @@ def country_comparison():
     row = pg_cur.fetchone()
 
     return render_template("country_comparison.html", data=row[0])
+
+@app.route("/3d_bubbles")
+def covid19():
+    pg_cur.execute(bubbles_query)
+    row = pg_cur.fetchone()
+
+    return render_template('3d_bubles.html', bubbles_data=row[0])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
