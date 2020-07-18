@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Total deaths depending on two metrics</title>
+	<title>Continents</title>
 	<style>
 .highcharts-figure, .highcharts-data-table table {
   min-width: 320px; 
@@ -47,12 +47,6 @@
 
 <figure class="highcharts-figure">
   <div id="container"></div>
-  <p class="highcharts-description">
-    Packed bubble charts are visualizations where the size and optionally
-    the color of the bubbles are used to visualize the data. The positioning
-    of the bubbles is not significant, but is optimized for compactness.
-    Try dragging the bubbles in this chart around, and see the effects.
-  </p>
 </figure>
 
 </figure>
@@ -64,11 +58,11 @@ Highcharts.chart('container', {
     height: '100%'
   },
   title: {
-    text: 'Carbon emissions around the world (2014)'
+    text: 'Continents'
   },
   tooltip: {
     useHTML: true,
-    pointFormat: '<b>{point.name}:</b> {point.value}m CO<sub>2</sub>'
+    pointFormat: '<b>{point.name}:</b> {point.value}'
   },
   plotOptions: {
     packedbubble: {
