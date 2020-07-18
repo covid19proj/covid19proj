@@ -28,6 +28,7 @@ order by countries_and_territories, cases_total desc
 	limit 10
 )
 """
+
 bubbles_query = """
 select
 string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
@@ -52,6 +53,7 @@ order by countries_and_territories, deaths_total desc
 limit 25
 )
 """
+
 continents_query = """
 select string_agg('{name:''' || continent_exp || ''',data:[' ||
 (
@@ -80,19 +82,19 @@ def country_comparison():
 
     return render_template("country_comparison.html", data=row[0])
 
-@app.route("/3d_bubbles")
-def covid19():
+@app.route("/bubbles")
+def bubbles():
     pg_cur.execute(bubbles_query)
     row = pg_cur.fetchone()
 
-    return render_template('bubbles_3d.html', bubbles_data=row[0])
+    return render_template('bubbles.html', data=row[0])
 
 @app.route("/continents")
-def covid19():
+def continents():
     pg_cur.execute(continents_query)
     row = pg_cur.fetchone()
 
-    return render_template('continents.html', continents_data=row[0])
+    return render_template('continents.html', data=row[0])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
