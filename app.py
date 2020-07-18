@@ -52,6 +52,24 @@ order by countries_and_territories, deaths_total desc
 limit 25
 )
 """
+continents_query = """
+select string_agg('{name:''' || continent_exp || ''',data:[' ||
+(
+select string_agg('{name:''' || countries_and_territories || ''',value:' ||
+	(
+		select deaths_total::text
+		from reports_cumulative r
+		where r.countries_and_territories = c.countries_and_territories
+		order by date_rep desc
+		limit 1
+	)
+	 || '}', ',')
+from countries c
+where con.continent_exp = c.continent_exp
+)
+|| ']}', ',')
+from continents con
+"""
 
 app = Flask(__name__)
 
@@ -68,6 +86,13 @@ def covid19():
     row = pg_cur.fetchone()
 
     return render_template('bubbles_3d.html', bubbles_data=row[0])
+
+@app.route("/continents")
+def covid19():
+    pg_cur.execute(continents_query)
+    row = pg_cur.fetchone()
+
+    return render_template('continents.html', continents_data=row[0])
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
