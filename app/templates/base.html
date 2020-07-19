@@ -1,0 +1,23 @@
+<html>
+    <head>
+		{% if title %}
+        <title>{{ title }}</title>
+        {% else %}
+         <title>Covid-19 Data</title>
+        {% endif %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+    <body>
+	<nav class="header">
+		<a href="/"><h1>COVID-19</h1></a>
+		<ul>
+			<li><a href="/"><h4>Charts</h4></a></li>
+			<!-- <li><a href="/chart2"><h4>Chart 2</h4></a></li> -->
+		</ul>	
+	</nav>
+	<div class="content-container">
+        {% block content %}
+		{% endblock %}
+	</div>
+    </body>
+</html>

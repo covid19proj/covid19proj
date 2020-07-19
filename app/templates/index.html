@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<hr/>
+<div class="maincounter">
+	<div>
+		<h2 class="lable">Coronavirus Cases:</h2>
+		<div class="counter neutral">{{ cases }}</div>
+	</div>
+        <div>
+                <h2 class="lable">Deaths:</h2>
+                <div class="counter red">{{ deaths }}</div>
+        </div>
+</div>
+<hr/>
+
+<div class="charts">
+        {% with data=country %}
+        {% include 'chart1.html' %}
+        {% endwith %}
+
+        {% with data=bubble %}
+        {% include 'chart2.html' %}
+        {% endwith %}
+
+        {% with data=continent %}
+        {% include 'chart3.html' %}
+        {% endwith %}
+</div>
+
+{% endblock %}

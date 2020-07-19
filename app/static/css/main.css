@@ -1,0 +1,102 @@
+@import "charts.css";
+
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+  
+*,
+*:before,
+*:after {
+box-sizing: inherit;
+}
+
+body {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #f2ece6;
+	color: #484848;
+	height: 100%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.header {
+	background-color: #4a3f39;
+	display: flex;
+	height: 70px;
+}
+
+.header h1 {
+	margin-left: 3rem;
+	margin-right: 3rem;
+	color: #f1581c;
+	cursor: pointer;
+}
+
+.header ul {
+	display: flex;
+	align-items: center;
+	list-style: none; /* Remove list bullets */
+	color: #ffffff !important;
+}
+
+.header li {
+	margin-right: 3rem;
+	cursor: pointer;
+}
+
+.content-container { 
+	margin: 0rem 3rem;
+	padding: 50px 0px;
+}
+
+/* footer {
+	position: absolute;
+	bottom: 0px;
+	background-color: #4a3f39;
+	display: flex;
+	align-items: center;
+	height: 50px;
+	width: 100%;
+	color: #f1581c;
+	padding-right: 3rem;
+	padding-left: 3rem;
+} */
+
+.maincounter {
+	display: flex;
+	justify-content: space-around;
+	font-weight: 400;
+	font-size: 1.5rem; 
+}
+
+.maincounter .lable {
+	margin-top: 5px !important;
+	margin-bottom: 10px !important;
+}
+
+.maincounter .counter {
+	font-weight: 700;
+	font-size: 2.5rem; 
+}
+
+.counter.neutral {
+	color: rgb(164, 159, 156);
+}
+
+.counter.red {
+	color: #f1581c;
+}
+
+.counter.green {
+	color: #0B6623;
+}
