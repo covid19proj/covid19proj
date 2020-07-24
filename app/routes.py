@@ -1,14 +1,21 @@
 from flask import render_template
+from flask import request
 from app import app
 import psycopg2
 
 pg_conn = psycopg2.connect("dbname='qnswfixs' user='qnswfixs' host='kandula.db.elephantsql.com' password='A82HCdQ9xDVrhHyDxxE_BHBGnx_WIeKB'")
 pg_cur = pg_conn.cursor()
 
+chart_type = "cases"
+
+selected_type = request.args.get("type")
+if selected_type:
+	chart_type = selected_type
+
 country_comparison_query = """
 select
 string_agg('{"name":"' || countries_and_territories || '",data:[' || (
-select string_agg(cases_total::text,',') from
+select string_agg(""" + chart_type + """_total::text,',') from
 (select * from reports_cumulative
 where countries_and_territories = c.countries_and_territories
 and date_rep >= c.first_case
@@ -20,10 +27,10 @@ countries c
 where countries_and_territories in (
 	select countries_and_territories from
 	(
-select distinct  on (countries_and_territories) countries_and_territories, cases_total
+select distinct  on (countries_and_territories) countries_and_territories, """ + chart_type + """_total
 from reports_cumulative
-order by countries_and_territories, cases_total desc
-) x order by cases_total desc
+order by countries_and_territories, """ + chart_type + """_total desc
+) x order by """ + chart_type + """_total desc
 	limit 10
 )
 """
@@ -32,7 +39,7 @@ bubbles_query = """
 select
 string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
 (
- SELECT deaths_total FROM reports_cumulative r
+ SELECT """ + chart_type + """_total FROM reports_cumulative r
  WHERE r.countries_and_territories = m1.countries_and_territories
  ORDER BY date_rep DESC
  LIMIT 1
@@ -45,10 +52,10 @@ m2.metric = 'median_age' and
 m1.countries_and_territories in (
 select countries_and_territories from
 (
-select distinct on (countries_and_territories) countries_and_territories, deaths_total
+select distinct on (countries_and_territories) countries_and_territories, """ + chart_type + """_total
 from reports_cumulative
-order by countries_and_territories, deaths_total desc
-) x order by deaths_total desc
+order by countries_and_territories, """ + chart_type + """_total desc
+) x order by """ + chart_type + """_total desc
 limit 25
 )
 """
@@ -58,7 +65,7 @@ select string_agg('{name:''' || continent_exp || ''',data:[' ||
 (
 select string_agg('{name:''' || countries_and_territories || ''',value:' ||
 	(
-		select deaths_total::text
+		select """ + chart_type + """_total::text
 		from reports_cumulative r
 		where r.countries_and_territories = c.countries_and_territories
 		order by date_rep desc
