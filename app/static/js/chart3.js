@@ -13,7 +13,7 @@ Highcharts.chart('continent', {
     plotOptions: {
       packedbubble: {
         minSize: '15%',
-        maxSize: '1000%',
+        maxSize: '500%',
         zMin: 0,
         zMax: 36000000,
         layoutAlgorithm: {
