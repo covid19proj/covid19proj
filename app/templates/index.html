@@ -14,6 +14,12 @@
         </div>
 </div>
 <hr/>
+<script>
+	function selectType() {
+		var selected = document.getElementById("selectOpt");
+		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + selected;
+	}
+</script>
 <select onchange="selectType()" id="selectOpt">
         <option value="" disabled selected style="display:none;">Select Type</option>
         <option value="cases">Cases</option>
