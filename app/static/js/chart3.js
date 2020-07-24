@@ -12,10 +12,10 @@ Highcharts.chart('continent', {
     },
     plotOptions: {
       packedbubble: {
-        minSize: '50%',
-        maxSize: '500%',
+        minSize: '15%',
+        maxSize: '600%',
         zMin: 0,
-        zMax: 10000000,
+        zMax: 15000000,
         layoutAlgorithm: {
           splitSeries: false,
           gravitationalConstant: 0.02
