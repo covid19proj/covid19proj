@@ -13,9 +13,9 @@ Highcharts.chart('continent', {
     plotOptions: {
       packedbubble: {
         minSize: '15%',
-        maxSize: '600%',
+        maxSize: '500%',
         zMin: 0,
-        zMax: 15000000,
+        zMax: 10000000,
         layoutAlgorithm: {
           splitSeries: false,
           gravitationalConstant: 0.02
