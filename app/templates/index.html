@@ -14,7 +14,12 @@
         </div>
 </div>
 <hr/>
-
+<select onchange="selectType()">
+        <option value="" disabled selected style="display:none;">Label</option>
+        <option value="cases">cases</option>
+        <option value="deaths">deaths</option>
+        <option value="tests">tests</option>
+</select>
 <div class="charts">
         {% with data=country %}
         {% include 'chart1.html' %}
