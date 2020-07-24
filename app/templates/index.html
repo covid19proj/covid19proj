@@ -16,8 +16,8 @@
 <hr/>
 <script>
 	function selectType() {
-		var selected = document.getElementById("selectOpt");
-		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + selected;
+		var myselect = document.getElementById("selectOpt");
+		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + myselect.options[myselect.selectedIndex].value;
 	}
 </script>
 <select onchange="selectType()" id="selectOpt">
