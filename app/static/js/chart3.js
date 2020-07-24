@@ -15,7 +15,7 @@ Highcharts.chart('continent', {
         minSize: '50%',
         maxSize: '500%',
         zMin: 0,
-        zMax: 5000000,
+        zMax: 33564122,
         layoutAlgorithm: {
           splitSeries: false,
           gravitationalConstant: 0.02
