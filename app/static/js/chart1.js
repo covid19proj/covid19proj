@@ -15,7 +15,7 @@ Highcharts.chart('country', {
   
     xAxis: {
       title: {
-        text: 'Day from the start of outbreak in the country'
+        text: 'Day from the beginning of the outbreak in the country'
       }
     },
   
