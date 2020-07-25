@@ -41,8 +41,8 @@ string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
 from country_metrics m1
 inner join country_metrics m2 using (countries_and_territories)
 where 
-m1.metric = 'gdp_per_capita' and
-m2.metric = 'median_age' and
+m1.metric = 'aged_70_older' and
+m2.metric = 'pop_data' and
 m1.countries_and_territories in (
 select countries_and_territories from
 (
