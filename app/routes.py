@@ -17,6 +17,7 @@ except:
 if pg_conn == None:
     sys.exit(1)
 pg_cur = pg_conn.cursor()
+pg_conn.autocommit = True
 
 country_comparison_query = """
 SELECT string_agg(
