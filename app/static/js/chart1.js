@@ -1,16 +1,19 @@
 Highcharts.chart('country', {
 
     title: {
-      text: 'Countries with most cases'
+      text: 'Top 10 countries with highest total counts'
     },
   
     yAxis: {
       title: {
-        text: 'Cases'
+        text: 'Total count'
       }
     },
   
     xAxis: {
+      title: {
+        text: 'Day from the start of outbreak in the country'
+      }
     },
   
     legend: {
