@@ -17,10 +17,9 @@ except:
     pg_conn = None
 
 if pg_conn == None:
-    sys.exit(0)
+    sys.exit(1)
 
 pg_cur = pg_conn.cursor()
-pg_conn.autocommit = True
 
 country_comparison_query = """
 select
@@ -99,16 +98,35 @@ def index():
     if selected_type:
         chart_type = selected_type
 
-    pg_cur.execute(country_comparison_query.format(chart_type))
+    try:
+        pg_cur.execute(country_comparison_query.format(chart_type))
+    except:
+        sys.exit(1)
     row1 = pg_cur.fetchone()
 
-    pg_cur.execute(bubbles_query.format(chart_type))
+    try:
+        pg_cur.execute(bubbles_query.format(chart_type))
+    except:
+        sys.exit(1)
     row2 = pg_cur.fetchone()
 
-    pg_cur.execute(continents_query.format(chart_type))
+    try:
+        pg_cur.execute(continents_query.format(chart_type))
+    except:
+        sys.exit(1)
     row3 = pg_cur.fetchone()
 
-    pg_cur.execute(count_query.format(chart_type))
+    try:
+        pg_cur.execute(count_query.format(chart_type))
+    except:
+        sys.exit(1)
     row4 = pg_cur.fetchone()
 
-    return render_template("index.html", country=row1[0], bubble=row2[0], continent=row3[0], count=row4[0], type=chart_type)
+    return render_template(
+	    "index.html",
+	    country=row1[0],
+	    bubble=row2[0],
+	    continent=row3[0],
+	    count=row4[0],
+	    type=chart_type
+    )
