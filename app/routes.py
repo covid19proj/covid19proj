@@ -64,6 +64,11 @@ where con.continent_exp = c.continent_exp
 from continents con
 """
 
+count_query = """
+select sum({0}_total)::text
+from reports_cumulative
+"""
+
 
 @app.route('/')
 @app.route('/index')
@@ -83,4 +88,7 @@ def index():
     pg_cur.execute(continents_query.format(chart_type))
     row3 = pg_cur.fetchone()
 
-    return render_template("index.html", country=row1[0], bubble=row2[0], continent=row3[0])
+    pg_cur.execute(count_query.format(chart_type))
+    row4 = pg_cur.fetchone()
+
+    return render_template("index.html", country=row1[0], bubble=row2[0], continent=row3[0], count=row4[0], type=chart_type.title())
