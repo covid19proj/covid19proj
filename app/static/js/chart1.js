@@ -1,6 +1,6 @@
 Highcharts.chart('country', {
     chart: {
-      height: '100%'
+      height: '50%'
     },
 
     title: {
