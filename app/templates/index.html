@@ -5,6 +5,12 @@
 <hr/>
 <div class="maincounter">
 	<div>
+		<select onchange="selectType()" id="selectOpt">
+			<option value="" disabled selected style="display:none;">Select Type</option>
+			<option value="cases">Cases</option>
+			<option value="deaths">Deaths</option>
+			<option value="tests">Tests</option>
+		</select>
 		<h2 class="lable">Coronavirus {{ type }}:</h2>
 		<div class="counter neutral">{{ count }}</div>
 	</div>
@@ -16,12 +22,6 @@
 		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + myselect.options[myselect.selectedIndex].value;
 	}
 </script>
-<select onchange="selectType()" id="selectOpt">
-        <option value="" disabled selected style="display:none;">Select Type</option>
-        <option value="cases">Cases</option>
-        <option value="deaths">Deaths</option>
-        <option value="tests">Tests</option>
-</select>
 <div class="charts">
         {% with data=country %}
         {% include 'chart1.html' %}
