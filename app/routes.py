@@ -2,9 +2,25 @@ from flask import render_template
 from flask import request
 from app import app
 import psycopg2
+import sys
 
-pg_conn = psycopg2.connect("dbname='qnswfixs' user='qnswfixs' host='kandula.db.elephantsql.com' password='A82HCdQ9xDVrhHyDxxE_BHBGnx_WIeKB'")
+pg_conn = None
+
+try:
+    pg_conn = psycopg2.connect(
+        dbname = "qnswfixs",
+        user = "qnswfixs",
+        host = "kandula.db.elephantsql.com",
+        password = "A82HCdQ9xDVrhHyDxxE_BHBGnx_WIeKB"
+    )
+except:
+    pg_conn = None
+
+if pg_conn == None:
+    sys.exit(0)
+
 pg_cur = pg_conn.cursor()
+pg_conn.autocommit = True
 
 country_comparison_query = """
 select
