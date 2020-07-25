@@ -5,7 +5,6 @@ import psycopg2
 import sys
 
 pg_conn = None
-
 try:
     pg_conn = psycopg2.connect(
         dbname = "qnswfixs",
@@ -15,79 +14,77 @@ try:
     )
 except:
     pg_conn = None
-
 if pg_conn == None:
     sys.exit(1)
-
 pg_cur = pg_conn.cursor()
 
 country_comparison_query = """
-select
-string_agg('{{"name":"' || countries_and_territories || '",data:[' || (
-select string_agg({0}_total::text,',') from
-(select * from reports_cumulative
-where countries_and_territories = c.countries_and_territories
-and date_rep >= c.first_case
-order by date_rep
-) x
-)::text || ']}}', ',')
-from
-countries c
-where countries_and_territories in (
-	select countries_and_territories from
-	(
-select distinct  on (countries_and_territories) countries_and_territories, {0}_total
-from reports_cumulative
-order by countries_and_territories, {0}_total desc
-) x order by {0}_total desc
-	limit 10
+SELECT string_agg(
+    '{{"name":"' || countries_and_territories || '",data:[' ||
+    (
+        SELECT string_agg({0}_total::text, ',')
+        FROM (
+            SELECT *
+            FROM reports
+            WHERE countries_and_territories = c.countries_and_territories
+              AND date_rep >= c.first_case
+            ORDER BY date_rep
+        ) x
+    )::text || ']}}', ',')
+FROM countries c
+WHERE countries_and_territories IN (
+    SELECT countries_and_territories
+    FROM (
+        SELECT DISTINCT ON (countries_and_territories) countries_and_territories,
+                                                       {0}_total
+        FROM reports
+        ORDER BY countries_and_territories, {0}_total DESC
+    ) x
+    ORDER BY {0}_total DESC
+	LIMIT 10
 )
 """
 
 bubbles_query = """
-select
-string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
-(
- SELECT {0}_total FROM reports_cumulative r
- WHERE r.countries_and_territories = m1.countries_and_territories
- ORDER BY date_rep DESC
- LIMIT 1
-)::text || ']', ',')
-from country_metrics m1
-inner join country_metrics m2 using (countries_and_territories)
-where 
-m1.metric = 'pop_data' and
-m2.metric = 'aged_70_older'
+SELECT string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
+       (
+        SELECT {0}_total
+        FROM reports r
+        WHERE r.countries_and_territories = m1.countries_and_territories
+        ORDER BY date_rep DESC
+        LIMIT 1
+       )::text || ']', ',')
+FROM country_metrics m1
+INNER JOIN country_metrics m2 USING (countries_and_territories)
+WHERE m1.metric = 'pop_data'
+  AND m2.metric = 'aged_70_older'
 """
 
 continents_query = """
-select string_agg('{{name:''' || continent_exp || ''',data:[' ||
-(
-select string_agg('{{name:''' || countries_and_territories || ''',value:' ||
-	(
-		select {0}_total::text
-		from reports_cumulative r
-		where r.countries_and_territories = c.countries_and_territories
-		order by date_rep desc
-		limit 1
-	)
-	 || '}}', ',')
-from countries c
-where con.continent_exp = c.continent_exp
-)
-|| ']}}', ',')
-from continents con
+SELECT string_agg('{{name:''' || continent_exp || ''',data:[' ||
+       (
+        SELECT string_agg('{{name:''' || countries_and_territories || ''',value:' ||
+               (
+                SELECT {0}_total::text
+                FROM reports r
+                WHERE r.countries_and_territories = c.countries_and_territories
+                ORDER BY date_rep DESC
+                LIMIT 1
+               ) || '}}', ',')
+        FROM countries c
+        WHERE cont.continent_exp = c.continent_exp
+       ) || ']}}', ',')
+FROM continents cont
 """
 
 count_query = """
-select sum(max)::text
-from (
-select max({0}_total) max
-from reports_cumulative
-group by countries_and_territories
+SELECT sum(max)::text
+FROM (
+    SELECT max({0}_total) max
+    FROM reports
+    GROUP BY countries_and_territories
 ) x
 """
-
 
 @app.route('/')
 @app.route('/index')
