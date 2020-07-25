@@ -65,8 +65,12 @@ from continents con
 """
 
 count_query = """
-select sum({0}_total)::text
+select sum(max)::text
+from (
+select max({0}_total) max
 from reports_cumulative
+group by countries_and_territories
+) x
 """
 
 
