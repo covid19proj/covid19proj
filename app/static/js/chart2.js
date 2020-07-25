@@ -7,12 +7,12 @@ Highcharts.chart('bubble', {
     },
   
     title: {
-      text: 'Median Age'
+      text: 'Total count depending on population and percentage of people older than 70'
     },
   
     xAxis: {
        title: {
-      text: 'GPD per capita'
+      text: 'Population'
     },
   
       gridLineWidth: 1,
@@ -23,7 +23,7 @@ Highcharts.chart('bubble', {
   
     yAxis: {
        title: {
-      text: 'Total deaths depending on 2 metrics'
+      text: 'Percentage of people older than 70'
     },
   
       startOnTick: false,
@@ -33,7 +33,7 @@ Highcharts.chart('bubble', {
       }
     },
   
-    series: [{name: 'Total Deaths',
+    series: [{name: 'Total count',
       data: bubbleData,
       marker: {
         fillColor: {
