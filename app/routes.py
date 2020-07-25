@@ -41,17 +41,8 @@ string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
 from country_metrics m1
 inner join country_metrics m2 using (countries_and_territories)
 where 
-m1.metric = 'aged_70_older' and
-m2.metric = 'pop_data' and
-m1.countries_and_territories in (
-select countries_and_territories from
-(
-select distinct on (countries_and_territories) countries_and_territories, {0}_total
-from reports_cumulative
-order by countries_and_territories, {0}_total desc
-) x order by {0}_total desc
-limit 25
-)
+m1.metric = 'pop_data' and
+m2.metric = 'aged_70_older'
 """
 
 continents_query = """
