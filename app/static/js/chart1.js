@@ -1,4 +1,7 @@
 Highcharts.chart('country', {
+    chart: {
+      height: '100%'
+    },
 
     title: {
       text: 'Top 10 countries with highest total counts'
