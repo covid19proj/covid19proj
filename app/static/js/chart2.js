@@ -3,6 +3,7 @@ Highcharts.chart('bubble', {
     chart: {
       type: 'bubble',
       plotBorderWidth: 1,
+      height: '100%',
       zoomType: 'xy'
     },
   
