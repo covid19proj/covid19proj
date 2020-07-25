@@ -12,26 +12,21 @@ Highcharts.chart('bubble', {
     },
   
     xAxis: {
-       title: {
-      text: 'Population'
-    },
-  
-      gridLineWidth: 1,
-      accessibility: {
-        rangeDescription: 'Range: 0 to 100.'
-      }
+      title: {
+        text: 'Population'
+      },
+      
+      type: 'logarithmic',
+      gridLineWidth: 1
     },
   
     yAxis: {
-       title: {
-      text: 'Percentage of people older than 70'
-    },
+      title: {
+        text: 'Percentage of people older than 70'
+      },
   
       startOnTick: false,
-      endOnTick: false,
-      accessibility: {
-        rangeDescription: 'Range: 0 to 100.'
-      }
+      endOnTick: false
     },
   
     series: [{name: 'Total count',
