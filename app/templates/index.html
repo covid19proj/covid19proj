@@ -27,7 +27,7 @@
 <script>
 	function selectType() {
 		var myselect = document.getElementById("selectOpt");
-		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?month={{ month }}&type=" + myselect.options[myselect.selectedIndex].value;
+		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + myselect.options[myselect.selectedIndex].value + "&month={{ month }}";
 	}
 	
 	function selectMonth() {
