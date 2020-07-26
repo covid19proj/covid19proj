@@ -97,6 +97,9 @@ def index():
     if selected_type:
         chart_type = selected_type
 
+    if not (chart_type in ["cases", "tests", "deaths"]):
+	sys.exit(1)
+	
     try:
         pg_cur.execute(country_comparison_query.format(chart_type))
     except:
