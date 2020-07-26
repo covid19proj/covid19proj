@@ -111,6 +111,16 @@ def index():
     if selected_month:
         month_number = selected_month
 
+    month_text = "June"
+    if month_number == "06":
+        month_text = "May"
+    elif month_number == "05":
+        month_text = "April"
+    elif month_number == "04":
+        month_text = "March"
+    elif month_number == "03":
+        month_text = "February"
+
     if not (month_number in ["03", "04", "05", "06", "07"]):
         sys.exit(1)
 	
@@ -145,5 +155,6 @@ def index():
 	    continent=row3[0],
 	    count=row4[0],
 	    type=chart_type,
-	    month=month_number
+	    month=month_number,
+	    mtext=month_text
     )
