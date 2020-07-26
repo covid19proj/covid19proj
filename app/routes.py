@@ -3,14 +3,15 @@ from flask import request
 from app import app
 import psycopg2
 import sys
+import os
 
 pg_conn = None
 try:
     pg_conn = psycopg2.connect(
-        dbname = "qnswfixs",
-        user = "qnswfixs",
-        host = "kandula.db.elephantsql.com",
-        password = "A82HCdQ9xDVrhHyDxxE_BHBGnx_WIeKB"
+        dbname = os.getenv("DBNAME"),
+        user = os.getenv("DBUSER"),
+        host = os.getenv("DBHOST"),
+        password = os.getenv("DBPASS")
     )
 except:
     pg_conn = None
