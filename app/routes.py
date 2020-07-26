@@ -30,6 +30,7 @@ SELECT string_agg(
             FROM reports
             WHERE countries_and_territories = c.countries_and_territories
               AND date_rep >= c.first_case
+              AND date_rep < '2020-{1}-01'
             ORDER BY date_rep
         ) x
     )::text || ']}}', ',')
@@ -40,10 +41,11 @@ WHERE countries_and_territories IN (
         SELECT DISTINCT ON (countries_and_territories) countries_and_territories,
                                                        {0}_total
         FROM reports
+        WHERE date_rep < '2020-{1}-01'
         ORDER BY countries_and_territories, {0}_total DESC
     ) x
     ORDER BY {0}_total DESC
-	LIMIT 10
+  LIMIT 10
 )
 """
 
@@ -53,6 +55,7 @@ SELECT string_agg('[' || m1.value::text || ',' || m2.value::text || ',' ||
         SELECT {0}_total
         FROM reports r
         WHERE r.countries_and_territories = m1.countries_and_territories
+          AND date_rep < '2020-{1}-01'
         ORDER BY date_rep DESC
         LIMIT 1
        )::text || ']', ',')
@@ -70,6 +73,7 @@ SELECT string_agg('{{name:''' || continent_exp || ''',data:[' ||
                 SELECT {0}_total::text
                 FROM reports r
                 WHERE r.countries_and_territories = c.countries_and_territories
+                  AND date_rep < '2020-{1}-01'
                 ORDER BY date_rep DESC
                 LIMIT 1
                ) || '}}', ',')
@@ -84,6 +88,7 @@ SELECT sum(max)::text
 FROM (
     SELECT max({0}_total) max
     FROM reports
+    WHERE date_rep < '2020-{1}-01'
     GROUP BY countries_and_territories
 ) x
 """
@@ -100,26 +105,35 @@ def index():
     if not (chart_type in ["cases", "tests", "deaths"]):
         sys.exit(1)
 	
+    month_number = "07"
+
+    selected_month = request.args.get("month")
+    if selected_month:
+        month_number = selected_month
+
+    if not (month_number in ["03", "04", "05", "06", "07"]):
+        sys.exit(1)
+	
     try:
-        pg_cur.execute(country_comparison_query.format(chart_type))
+        pg_cur.execute(country_comparison_query.format(chart_type, month_number))
     except:
         sys.exit(1)
     row1 = pg_cur.fetchone()
 
     try:
-        pg_cur.execute(bubbles_query.format(chart_type))
+        pg_cur.execute(bubbles_query.format(chart_type, month_number))
     except:
         sys.exit(1)
     row2 = pg_cur.fetchone()
 
     try:
-        pg_cur.execute(continents_query.format(chart_type))
+        pg_cur.execute(continents_query.format(chart_type, month_number))
     except:
         sys.exit(1)
     row3 = pg_cur.fetchone()
 
     try:
-        pg_cur.execute(count_query.format(chart_type))
+        pg_cur.execute(count_query.format(chart_type, month_number))
     except:
         sys.exit(1)
     row4 = pg_cur.fetchone()
@@ -130,5 +144,6 @@ def index():
 	    bubble=row2[0],
 	    continent=row3[0],
 	    count=row4[0],
-	    type=chart_type
+	    type=chart_type,
+	    month=month_number
     )
