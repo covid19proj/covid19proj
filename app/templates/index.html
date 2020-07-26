@@ -11,7 +11,15 @@
 			<option value="deaths">Deaths</option>
 			<option value="tests">Tests</option>
 		</select>
-		<h2 class="lable">Coronavirus {{ type }}:</h2>
+		<select onchange="selectMonth()" id="selectM">
+			<option value="" disabled selected style="display:none;">Select Month</option>
+			<option value="03">February</option>
+			<option value="04">March</option>
+			<option value="05">April</option>
+			<option value="06">May</option>
+			<option value="07">June</option>
+		</select>
+		<h2 class="lable">Coronavirus {{ type }} for month {{ month }}:</h2>
 		<div class="counter neutral">{{ count }}</div>
 	</div>
 </div>
@@ -19,7 +27,12 @@
 <script>
 	function selectType() {
 		var myselect = document.getElementById("selectOpt");
-		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + myselect.options[myselect.selectedIndex].value;
+		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?month=" + {{ month }} + "&type=" + myselect.options[myselect.selectedIndex].value;
+	}
+	
+	function selectMonth() {
+		var myselect = document.getElementById("selectM");
+		window.location.href = "https://covid19proj.osc-fr1.scalingo.io/?type=" + {{ type }} + "&month=" + myselect.options[myselect.selectedIndex].value;
 	}
 </script>
 <div class="charts">
