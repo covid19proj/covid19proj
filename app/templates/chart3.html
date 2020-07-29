@@ -11,7 +11,7 @@
 </figure>
 
 <script type="text/javascript">
-    continentsData = [{{ data|safe }}]
+    continentsData = {{ data|safe }}
 </script>
 <script src="{{ url_for('static', filename='js/chart3.js') }}"></script>
 {% endblock %}
