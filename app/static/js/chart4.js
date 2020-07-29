@@ -1,5 +1,6 @@
 Highcharts.chart('gdp', {
   chart: {
+    height: '50%',
     zoomType: 'xy'
   },
   title: {
