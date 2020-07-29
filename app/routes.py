@@ -80,14 +80,14 @@ FROM continents cont
 """
 
 gdp_query = """
-SELECT '{''countries'':[''' || string_agg(a.countries_and_territories::text, ''',''') || '''],' ||
+SELECT '{{''countries'':[''' || string_agg(a.countries_and_territories::text, ''',''') || '''],' ||
        '''gdps'':[' || string_agg(a.value::text, ',') || '],' ||
        '''rates'':[' || string_agg(((
            SELECT max({0}_total)
            FROM reports r
            WHERE r.countries_and_territories = a.countries_and_territories
              AND date_rep < '2020-{1}-01'
-       )::numeric*1000000/b.value)::text, ',') || ']}'
+       )::numeric*1000000/b.value)::text, ',') || ']}}'
 FROM public.country_metrics a
 INNER JOIN public.country_metrics b USING (countries_and_territories)
 WHERE a.metric = 'gdp_per_capita' 
