@@ -80,9 +80,9 @@ FROM continents cont
 """
 
 gdp_query = """
-SELECT '{{''countries'':[''' || string_agg(a.countries_and_territories::text, ''',''') || '''],' ||
-       '''gdps'':[' || string_agg(a.value::text, ',') || '],' ||
-       '''rates'':[' || string_agg(((
+SELECT '{{countries:[''' || string_agg(a.countries_and_territories::text, ''',''') || '''],' ||
+       'gdps:[' || string_agg(a.value::text, ',') || '],' ||
+       'rates:[' || string_agg(((
            SELECT max({0}_total)
            FROM reports r
            WHERE r.countries_and_territories = a.countries_and_territories
