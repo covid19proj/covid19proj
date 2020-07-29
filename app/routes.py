@@ -36,16 +36,12 @@ SELECT string_agg(
     )::text || ']}}', ',')
 FROM countries c
 WHERE countries_and_territories IN (
-    SELECT countries_and_territories
-    FROM (
-        SELECT DISTINCT ON (countries_and_territories) countries_and_territories,
-                                                       {0}_total
-        FROM reports
-        WHERE date_rep < '2020-{1}-01'
-        ORDER BY countries_and_territories, {0}_total DESC
-    ) x
-    ORDER BY {0}_total DESC
-  LIMIT 10
+  SELECT countries_and_territories
+  FROM reports
+  WHERE date_rep < '2020-{1}-01'
+  GROUP BY countries_and_territories
+  ORDER BY SUM({0}) DESC
+  LIMIT 25
 )
 """
 
@@ -81,6 +77,30 @@ SELECT string_agg('{{name:''' || continent_exp || ''',data:[' ||
         WHERE cont.continent_exp = c.continent_exp
        ) || ']}}', ',')
 FROM continents cont
+"""
+
+gdp_query = """
+SELECT '{''countries'':[''' || string_agg(a.countries_and_territories::text, ''',''') || '''],' ||
+       '''gdps'':[' || string_agg(a.value::text, ',') || '],' ||
+       '''rates'':[' || string_agg(((
+           SELECT max({0}_total)
+           FROM reports r
+           WHERE r.countries_and_territories = a.countries_and_territories
+             AND date_rep < '2020-{1}-01'
+       )::numeric*1000000/b.value)::text, ',') || ']}'
+FROM public.country_metrics a
+INNER JOIN public.country_metrics b USING (countries_and_territories)
+WHERE a.metric = 'gdp_per_capita' 
+  AND b.metric = 'pop_data'
+  AND a.countries_and_territories IN 
+(
+  SELECT countries_and_territories
+  FROM reports
+  WHERE date_rep < '2020-{1}-01'
+  GROUP BY countries_and_territories
+  ORDER BY SUM({0}) DESC
+  LIMIT 25
+)
 """
 
 count_query = """
@@ -143,17 +163,24 @@ def index():
     row3 = pg_cur.fetchone()
 
     try:
-        pg_cur.execute(count_query.format(chart_type, month_number))
+        pg_cur.execute(gdp_query.format(chart_type, month_number))
     except:
         sys.exit(1)
     row4 = pg_cur.fetchone()
+
+    try:
+        pg_cur.execute(count_query.format(chart_type, month_number))
+    except:
+        sys.exit(1)
+    row5 = pg_cur.fetchone()
 
     return render_template(
 	    "index.html",
 	    country=row1[0],
 	    bubble=row2[0],
 	    continent=row3[0],
-	    count=row4[0],
+	    gdp=row4[0],
+	    count=row5[0],
 	    type=chart_type,
 	    month=month_number,
 	    mtext=month_text
