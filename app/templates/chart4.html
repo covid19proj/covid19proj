@@ -9,7 +9,7 @@
 </figure>
 
 <script type="text/javascript">
-    gdpData = [{{ data|safe }}]
+    gdpData = {{ data|safe }}
 </script>
 <script src="{{ url_for('static', filename='js/chart4.js') }}"></script>
 {% endblock %}
