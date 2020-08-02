@@ -41,7 +41,7 @@ WHERE countries_and_territories IN (
   WHERE date_rep < '2020-{1}-01'
   GROUP BY countries_and_territories
   ORDER BY SUM({0}) DESC
-  LIMIT 25
+  LIMIT 10
 )
 """
 
